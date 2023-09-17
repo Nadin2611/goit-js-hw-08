@@ -1,4 +1,8 @@
 // Add imports above this line
+import SimpleLightbox from 'simplelightbox';
+
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import { galleryItems } from './gallery-items';
 // Change code below this line
 
@@ -8,46 +12,30 @@ const gallery = document.querySelector('ul.gallery');
 const markup = galleryItems
   .map(
     ({ description, original, preview }) => `
-  <li class="gallery__item">
-    <a class="gallery__link" href="${original}">
-      <img
-        class="gallery__image"
-        src="${preview}"
-        data-source="${original}"
-        alt="${description}"
+ <li class="gallery__item">
+   <a class="gallery__link" href="${original}">
+      <img 
+      class="gallery__image"
+      src="${preview}" 
+      alt="${description}" 
       />
-    </a>
-  </li>
+   </a>
+</li>
 `
   )
   .join('');
 
 gallery.insertAdjacentHTML('beforeend', markup);
 
-let instance = null;
+const galleryImages = document.querySelectorAll('.gallery__image');
 
-gallery.addEventListener('click', event => {
-  if (event.target.nodeName !== 'IMG') {
-    return;
-  }
-  event.preventDefault();
-
-  const largeImageUrl = event.target.getAttribute('data-source');
-
-  instance = basicLightbox.create(
-    `<img src="${largeImageUrl}" width="800" height="600">`
-  );
-
-  instance.show();
-
-  window.addEventListener('keydown', handleKeyPress);
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
 });
 
-function handleKeyPress(event) {
-  if (event.key === 'Escape') {
-    if (instance) {
-      instance.close();
-      window.removeEventListener('keydown', handleKeyPress);
-    }
-  }
-}
+galleryImages.forEach(image => {
+  image.addEventListener('click', () => {
+    lightbox.open();
+  });
+});
