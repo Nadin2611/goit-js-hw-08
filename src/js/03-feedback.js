@@ -3,7 +3,7 @@ const emailInput = document.querySelector('.feedback-form input');
 const textarea = document.querySelector('.feedback-form textarea');
 let isSubmitted = false;
 
-const onUpdateForm = _.throttle(() => {
+function onUpdateForm(event) {
   const feedbackFormState = {
     email: emailInput.value,
     message: textarea.value,
@@ -12,12 +12,13 @@ const onUpdateForm = _.throttle(() => {
     'feedback-form-state',
     JSON.stringify(feedbackFormState)
   );
-}, 500);
+}
 
 form.addEventListener('input', onUpdateForm);
 form.addEventListener('submit', onFormSubmit);
 
 const savedFormState = localStorage.getItem('feedback-form-state');
+console.log(savedFormState);
 
 if (savedFormState) {
   const feedbackFormState = JSON.parse(savedFormState);
@@ -41,4 +42,5 @@ function onFormSubmit(event) {
 
   form.removeEventListener('input', onUpdateForm);
   form.removeEventListener('submit', onFormSubmit);
+  console.log(savedFormState);
 }
