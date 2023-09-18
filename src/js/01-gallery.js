@@ -27,15 +27,7 @@ const markup = galleryItems
 
 gallery.insertAdjacentHTML('beforeend', markup);
 
-const galleryImages = document.querySelectorAll('.gallery__image');
-
 const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
-});
-
-galleryImages.forEach(image => {
-  image.addEventListener('click', () => {
-    lightbox.open();
-  });
 });
