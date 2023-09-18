@@ -1,10 +1,16 @@
+import throttle from 'lodash.throttle';
+
 const form = document.querySelector('.feedback-form');
 const emailInput = document.querySelector('.feedback-form input');
 const textarea = document.querySelector('.feedback-form textarea');
-let isSubmitted = false;
+
+feedbackFormState = {
+  email: '',
+  message: '',
+};
 
 function onUpdateForm(event) {
-  const feedbackFormState = {
+  feedbackFormState = {
     email: emailInput.value,
     message: textarea.value,
   };
@@ -13,12 +19,12 @@ function onUpdateForm(event) {
     JSON.stringify(feedbackFormState)
   );
 }
+const throttledUpdateForm = throttle(onUpdateForm, 500);
 
-form.addEventListener('input', onUpdateForm);
+form.addEventListener('input', throttledUpdateForm);
 form.addEventListener('submit', onFormSubmit);
 
 const savedFormState = localStorage.getItem('feedback-form-state');
-console.log(savedFormState);
 
 if (savedFormState) {
   const feedbackFormState = JSON.parse(savedFormState);
@@ -29,18 +35,20 @@ if (savedFormState) {
 function onFormSubmit(event) {
   event.preventDefault();
 
-  if (!isSubmitted) {
-    console.log(savedFormState);
-    isSubmitted = true;
+  if (
+    feedbackFormState.email.trim() === '' ||
+    feedbackFormState.message.trim() === ''
+  ) {
+    console.log('Заповніть, будь ласка, усі поля перед відправкою форми.');
+    return;
   }
+  console.log('Дані форми були відправлені:', feedbackFormState);
 
-  if (savedFormState === null || savedFormState === '{}') {
-    localStorage.removeItem('feedback-form-state');
-  }
+  localStorage.removeItem('feedback-form-state');
 
   event.currentTarget.reset();
-
-  form.removeEventListener('input', onUpdateForm);
-  form.removeEventListener('submit', onFormSubmit);
-  console.log(savedFormState);
+  feedbackFormState = {
+    email: '',
+    message: '',
+  };
 }
