@@ -42,7 +42,7 @@ function onFormSubmit(event) {
     console.log('Заповніть, будь ласка, усі поля перед відправкою форми.');
     return;
   }
-  // console.log('Дані форми були відправлені:', feedbackFormState);
+
   console.log('Дані форми були відправлені:', {
     email: event.currentTarget.email.value,
     message: event.currentTarget.message.value,
