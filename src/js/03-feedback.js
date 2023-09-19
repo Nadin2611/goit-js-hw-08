@@ -36,13 +36,17 @@ function onFormSubmit(event) {
   event.preventDefault();
 
   if (
-    feedbackFormState.email.trim() === '' ||
-    feedbackFormState.message.trim() === ''
+    event.currentTarget.email.value.trim() === '' ||
+    event.currentTarget.message.value.trim() === ''
   ) {
     console.log('Заповніть, будь ласка, усі поля перед відправкою форми.');
     return;
   }
-  console.log('Дані форми були відправлені:', feedbackFormState);
+  // console.log('Дані форми були відправлені:', feedbackFormState);
+  console.log('Дані форми були відправлені:', {
+    email: event.currentTarget.email.value,
+    message: event.currentTarget.message.value,
+  });
 
   localStorage.removeItem('feedback-form-state');
 
